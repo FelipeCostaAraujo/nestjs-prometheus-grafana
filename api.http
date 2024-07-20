@@ -3,16 +3,17 @@
 
 GET {{baseUrl}}
 
+# {admin 'john' 'changeme'; user: 'maria', 'guess', },
+
 ###
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "username": "john",
-    "password": "changeme"
+    "username": "maria",
+    "password": "guess"
 }
-
 
 ###
 GET {{baseUrl}}/auth/profile
