@@ -147,7 +147,7 @@ docker-compose up -d
         API: http://localhost:3000
         Prometheus: http://localhost:9090
         Grafana: http://localhost:3001
-        Swagger: http://localhost:3000/api-docs
+        Swagger: http://localhost:3000/swagger
 
 ## Estrutura do Projeto
     api: Contém o código-fonte da API.
