@@ -21,7 +21,7 @@ export class RolesGuard implements CanActivate {
   }
 
   matchRoles(roles: string, userRole: string): boolean {
-    if (roles === userRole) {
+    if (roles.toLocaleUpperCase() === userRole) {
       return true;
     }
     return false;

@@ -3,7 +3,7 @@
 
 GET {{baseUrl}}
 
-# {admin 'john' 'changeme'; user: 'maria', 'guess', },
+# {admin 'john' 'changeme'; user: 'maria', 'guess', andrew, 'changeme'},
 
 ###
 # @name login
@@ -11,7 +11,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "username": "maria",
+    "email": "maria@gmail.com",
     "password": "guess"
 }
 
@@ -20,9 +20,9 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "username": "maria",
-    "password": "guess",
-    "email": "maria@gmail.com"
+    "username": "andrew",
+    "password": "changeme",
+    "email": "andrew@gmail.com"
 }
 
 ###

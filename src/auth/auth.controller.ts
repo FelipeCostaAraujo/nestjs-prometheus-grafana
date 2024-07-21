@@ -11,8 +11,9 @@ import {
   } from '@nestjs/common';
   import { AuthGuard, Public } from './auth.guard';
   import { AuthService } from './auth.service';
-import { SignInDto } from './dto/sign-up.dto';
+import { SignUpDto } from './dto/sign-up.dto';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { SignInDto } from './dto/sign-in.dto';
   
   @ApiBearerAuth()
   @Controller('auth')
@@ -23,14 +24,14 @@ import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
     @ApiOperation({ summary: 'Login' })
     @Public()
     @Post('login')
-    signIn(@Body() signInDto: Record<string, any>) {
-      return this.authService.signIn(signInDto.username, signInDto.password);
+    signIn(@Body() signInDto: SignInDto) {
+      return this.authService.signIn(signInDto.email, signInDto.password);
     }
 
     @Public()
     @ApiOperation({ summary: 'Register' })
     @Post('register')
-    signUp(@Body() signUpDto: SignInDto) {
+    signUp(@Body() signUpDto: SignUpDto) {
       return this.authService.signUp(signUpDto);
     }
   
