@@ -1,4 +1,4 @@
-# Projeto API com Monitoramento, Metricas e Banco de Dados MongoDB Replicado
+# Projeto API com Monitoramento e Banco de Dados MongoDB Replicado
 
 Este projeto configura um ambiente de desenvolvimento para uma API que utiliza MongoDB replicado, Prometheus para monitoramento e Grafana para visualização dos dados de monitoramento. A configuração é gerenciada utilizando Docker Compose.
 
@@ -19,7 +19,7 @@ Este projeto configura um ambiente de desenvolvimento para uma API que utiliza M
 - **Redes**:
   - `my-network`
 
-### MongoDB
+### MongoDB Primário
 - **Imagem**: `docker.io/bitnami/mongodb:7.0`
 - **Container Name**: `mongodb`
 - **Portas**: `27017:27017`
@@ -110,7 +110,6 @@ Este projeto configura um ambiente de desenvolvimento para uma API que utiliza M
 - **Listagem de Usuários**: Apenas usuários com a permissão de administrador podem listar todos os usuários.
 - **Rotas**:
   - `GET /users`: Lista todos os usuários (requer permissão de administrador).
-  - `GET /users`: Para listar um usuário (requer permissão de administrador).
 
 ### Swagger
 
@@ -120,45 +119,44 @@ Este projeto configura um ambiente de desenvolvimento para uma API que utiliza M
 
 ### Testando as Rotas com VSCode REST Client
 
-## Para testar as rotas utilizando a extensão REST Client no VSCode, siga os passos abaixo:
+Para testar as rotas utilizando a extensão REST Client no VSCode, siga os passos abaixo:
 
-  1 - Instale a Extensão REST Client: No VSCode.
-
-  2 - Acesse o Arquivo api.http.
-
-  3 - Abra o arquivo api.http no VSCode. Cada requisição terá um botão "Send Request" acima dela. Clique neste botão para enviar a requisição e ver a resposta diretamente no VSCode.
-
+1. Instale a Extensão REST Client no VSCode.
+2. Acesse o arquivo `api.http`.
+3. Abra o arquivo `api.http` no VSCode. Cada requisição terá um botão "Send Request" acima dela. Clique neste botão para enviar a requisição e ver a resposta diretamente no VSCode.
 
 ### Como Usar
 
-  ## Certifique-se de que a rede my-network esteja criada. Caso contrário, crie-a com o comando:
+Certifique-se de que a rede `my-network` esteja criada. Caso contrário, crie-a com o comando:
 
 ```bash
 docker network create my-network
 ```
 
-## Para iniciar os serviços, utilize o comando:
+Para iniciar os serviços, utilize o comando:
 
 ```bash
 docker-compose up -d
 ```
 
-## Acesse os serviços nas seguintes URLs:
-        API: http://localhost:3000
-        Prometheus: http://localhost:9090
-        Grafana: http://localhost:3001
-        Swagger: http://localhost:3000/swagger
+Acesse os serviços nas seguintes URLs:
+- API: [http://localhost:3000](http://localhost:3000)
+- Prometheus: [http://localhost:9090](http://localhost:9090)
+- Grafana: [http://localhost:3001](http://localhost:3001)
+- Swagger: [http://localhost:3000/swagger](http://localhost:3000/swagger)
 
 ## Estrutura do Projeto
-    api: Contém o código-fonte da API.
-    prometheus: Contém a configuração do Prometheus.
-    grafana: Contém a configuração e os dados do Grafana.
+
+- **api**: Contém o código-fonte da API.
+- **prometheus**: Contém a configuração do Prometheus.
+- **grafana**: Contém a configuração e os dados do Grafana.
 
 ## Monitoramento
 
-    Prometheus: Usado para coletar métricas e monitorar os serviços.
-    Grafana: Usado para visualizar os dados de monitoramento coletados pelo Prometheus.
+- **Prometheus**: Usado para coletar métricas e monitorar os serviços.
+- **Grafana**: Usado para visualizar os dados de monitoramento coletados pelo Prometheus.
 
 ## Notas
-    Certifique-se de ajustar as variáveis de ambiente e volumes conforme necessário para seu ambiente de desenvolvimento.
-    O MongoDB está configurado com replicação para garantir alta disponibilidade e redundância dos dados.
+
+- Certifique-se de ajustar as variáveis de ambiente e volumes conforme necessário para seu ambiente de desenvolvimento.
+- O MongoDB está configurado com replicação para garantir alta disponibilidade e redundância dos dados.
