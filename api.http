@@ -36,13 +36,14 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "userId": 3,
-    "username": "jane",
-    "password": "changeme",
-    "role": "user"
+    "email": "andrew@gmail.com"
 }
 
 ###
 GET {{baseUrl}}/users
 Content-Type: application/json
+Authorization: {{token}}
+
+###
+GET {{baseUrl}}/app-metrics
 Authorization: {{token}}

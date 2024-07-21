@@ -1,11 +1,15 @@
-FROM node:20
+FROM node:20-slim
 
-WORKDIR /app
+RUN apt-get update && apt-get install -y openssl
 
-COPY package.json .
+WORKDIR /home/node/app
+
+COPY package*.json ./
+
+COPY . .
 
 RUN npm install
 
-COPY . .
+EXPOSE 3000
 
 CMD [ "npm", "start" ]

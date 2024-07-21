@@ -1,22 +1,19 @@
 services:
-  #  api:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #      - .:/home/node/app  
-  #   environment:
-  #     DATABASE_URL: mongodb://root:root@mongodb:27017/dev
-  #     PROMETHEUS_URI: http://prometheus:9090
-  #     GRAFANA_URI: http://grafana:3001
-  #   depends_on:
-  #     - mongodb
-  #     - prometheus
-  #     - grafana  
-  #   networks:
-  #      - my-network  
+  api:
+    build: .
+    container_name: api
+    ports:
+       - 3000:3000
+    environment:
+       DATABASE_URL: mongodb://root:root@mongodb:27017/dev?directConnection=true
+       PROMETHEUS_URI: http://prometheus:9090
+       GRAFANA_URI: http://grafana:3001
+    depends_on:
+       - mongodb
+       - prometheus
+       - grafana  
+    networks:
+        - my-network  
 
   mongodb:
     image: docker.io/bitnami/mongodb:7.0
@@ -79,7 +76,7 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - 3001:3001
+      - 3001:3000
     environment:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin

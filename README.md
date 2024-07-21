@@ -1,73 +1,163 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Projeto API com Monitoramento, Metricas e Banco de Dados MongoDB Replicado
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este projeto configura um ambiente de desenvolvimento para uma API que utiliza MongoDB replicado, Prometheus para monitoramento e Grafana para visualização dos dados de monitoramento. A configuração é gerenciada utilizando Docker Compose.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Serviços
 
-## Description
+### API
+- **Build**: Diretório atual
+- **Container Name**: `api`
+- **Portas**: `3000:3000`
+- **Variáveis de Ambiente**:
+  - `DATABASE_URL`: URL do MongoDB
+  - `PROMETHEUS_URI`: URL do Prometheus
+  - `GRAFANA_URI`: URL do Grafana
+- **Dependências**:
+  - `mongodb`
+  - `prometheus`
+  - `grafana`
+- **Redes**:
+  - `my-network`
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### MongoDB
+- **Imagem**: `docker.io/bitnami/mongodb:7.0`
+- **Container Name**: `mongodb`
+- **Portas**: `27017:27017`
+- **Variáveis de Ambiente**:
+  - `MONGODB_ADVERTISED_HOSTNAME`: `mongodb`
+  - `MONGODB_ROOT_USERNAME`: `root`
+  - `MONGODB_ROOT_PASSWORD`: `root`
+  - `MONGODB_REPLICA_SET_MODE`: `primary`
+  - `MONGODB_REPLICA_SET_KEY`: `replicasetkey123`
+  - `MONGODB_USERNAME`: `root`
+  - `MONGODB_PASSWORD`: `root`
+  - `MONGODB_DATABASE`: `dev`
+- **Volumes**:
+  - `mongodb_data:/bitnami/mongodb`
+- **Redes**:
+  - `my-network`
 
-## Installation
+### MongoDB Secundário
+- **Imagem**: `docker.io/bitnami/mongodb:7.0`
+- **Dependências**:
+  - `mongodb`
+- **Variáveis de Ambiente**:
+  - `MONGODB_ADVERTISED_HOSTNAME`: `mongodb-secondary`
+  - `MONGODB_REPLICA_SET_MODE`: `secondary`
+  - `MONGODB_INITIAL_PRIMARY_HOST`: `mongodb`
+  - `MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD`: `root`
+  - `MONGODB_REPLICA_SET_KEY`: `replicasetkey123`
+- **Redes**:
+  - `my-network`
 
-```bash
-$ npm install
-```
+### MongoDB Árbitro
+- **Imagem**: `docker.io/bitnami/mongodb:7.0`
+- **Dependências**:
+  - `mongodb`
+- **Variáveis de Ambiente**:
+  - `MONGODB_ADVERTISED_HOSTNAME`: `mongodb-arbiter`
+  - `MONGODB_REPLICA_SET_MODE`: `arbiter`
+  - `MONGODB_INITIAL_PRIMARY_HOST`: `mongodb`
+  - `MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD`: `root`
+  - `MONGODB_REPLICA_SET_KEY`: `replicasetkey123`
+- **Redes**:
+  - `my-network`
 
-## Running the app
+### Prometheus
+- **Imagem**: `prom/prometheus:latest`
+- **Container Name**: `prometheus`
+- **Portas**: `9090:9090`
+- **Volumes**:
+  - `./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml`
+  - `prometheus_data:/prometheus`
+- **Redes**:
+  - `my-network`
 
-```bash
-# development
-$ npm run start
+### Grafana
+- **Imagem**: `grafana/grafana:latest`
+- **Container Name**: `grafana`
+- **Portas**: `3001:3000`
+- **Variáveis de Ambiente**:
+  - `GF_SECURITY_ADMIN_USER`: `admin`
+  - `GF_SECURITY_ADMIN_PASSWORD`: `admin`
+- **Volumes**:
+  - `./grafana:/var/lib/grafana`
+- **Redes**:
+  - `my-network`
 
-# watch mode
-$ npm run start:dev
+## Redes
 
-# production mode
-$ npm run start:prod
-```
+- **my-network**: Rede externa
 
-## Test
+## Volumes
 
-```bash
-# unit tests
-$ npm run test
+- **mongodb_data**: Driver local
+- **prometheus_data**: Driver local
+- **grafana_data**: Driver local
 
-# e2e tests
-$ npm run test:e2e
+## Features
 
-# test coverage
-$ npm run test:cov
-```
+### Autenticação e Registro de Usuários
 
-## Support
+- **JWT e Auth Guard**: O sistema utiliza JSON Web Tokens (JWT) para autenticação e o Auth Guard para proteger rotas.
+- **Rotas**:
+  - `POST /auth/login`: Login de usuário.
+  - `POST /auth/register`: Registro de novo usuário.
+  - `GET /auth/profile`: Perfil do usuário autenticado.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Recurso de Usuário
 
-## Stay in touch
+- **Listagem de Usuários**: Apenas usuários com a permissão de administrador podem listar todos os usuários.
+- **Rotas**:
+  - `GET /users`: Lista todos os usuários (requer permissão de administrador).
+  - `GET /users`: Para listar um usuário (requer permissão de administrador).
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Swagger
 
-## License
+- **Documentação da API**: A API possui documentação gerada pelo Swagger disponível em `/swagger`.
 
-Nest is [MIT licensed](LICENSE).
+## Exemplos de Rotas
+
+### Testando as Rotas com VSCode REST Client
+
+## Para testar as rotas utilizando a extensão REST Client no VSCode, siga os passos abaixo:
+
+  1 - Instale a Extensão REST Client: No VSCode.
+
+  2 - Acesse o Arquivo api.http.
+
+  3 - Abra o arquivo api.http no VSCode. Cada requisição terá um botão "Send Request" acima dela. Clique neste botão para enviar a requisição e ver a resposta diretamente no VSCode.
+
+
+### Como Usar
+
+  ## Certifique-se de que a rede my-network esteja criada. Caso contrário, crie-a com o comando:
+
+´´´bash
+docker network create my-network
+´´´
+
+## Para iniciar os serviços, utilize o comando:
+
+´´´bash
+docker-compose up -d
+´´´
+## Acesse os serviços nas seguintes URLs:
+        API: http://localhost:3000
+        Prometheus: http://localhost:9090
+        Grafana: http://localhost:3001
+        Swagger: http://localhost:3000/api-docs
+
+## Estrutura do Projeto
+    api: Contém o código-fonte da API.
+    prometheus: Contém a configuração do Prometheus.
+    grafana: Contém a configuração e os dados do Grafana.
+
+## Monitoramento
+
+    Prometheus: Usado para coletar métricas e monitorar os serviços.
+    Grafana: Usado para visualizar os dados de monitoramento coletados pelo Prometheus.
+
+## Notas
+    Certifique-se de ajustar as variáveis de ambiente e volumes conforme necessário para seu ambiente de desenvolvimento.
+    O MongoDB está configurado com replicação para garantir alta disponibilidade e redundância dos dados.
