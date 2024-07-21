@@ -133,15 +133,16 @@ Este projeto configura um ambiente de desenvolvimento para uma API que utiliza M
 
   ## Certifique-se de que a rede my-network esteja criada. Caso contrário, crie-a com o comando:
 
-´´´bash
+```bash
 docker network create my-network
-´´´
+```
 
 ## Para iniciar os serviços, utilize o comando:
 
-´´´bash
+```bash
 docker-compose up -d
-´´´
+```
+
 ## Acesse os serviços nas seguintes URLs:
         API: http://localhost:3000
         Prometheus: http://localhost:9090
